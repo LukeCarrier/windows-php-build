@@ -21,7 +21,7 @@ Param(
 
         # Optional libraries
         "--with-xml",                         # Expat XML parser
-        "--with-libxml={deps}\bin\libxml2",   # XML parser
+        "--with-libxml",                      # XML parser
 
         # SAPIs
         "--enable-cli",                       # Command line (php.exe)
@@ -43,7 +43,7 @@ Param(
         "--with-dom",                         # Document Object Model
         "--with-simplexml"                    # SimpleXML parser
         "--enable-xmlreader",                 # XMLReader
-        #"--with-xmlrpc",                     # XMLRPC-EPI support (BROKEN)
+        "--with-xmlrpc",                      # XMLRPC-EPI support
         "--enable-xmlwriter",                 # XMLWriter
 
         # Compression
