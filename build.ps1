@@ -72,7 +72,15 @@ Param(
 
     [switch]   $fork,
     [switch]   $debug,
-    [string[]] $actions = @("cache", "clean", "prepare", "configure", "build", "snapshot"),
+    [string[]] $actions = @(
+        "cache",
+        "clean",
+        "prepare",
+        "configure",
+        "build",
+        "test",
+        "snapshot"
+    ),
 
     [string] $7zip = "C:\Program Files\7-Zip\7z.exe",
     [string] $vcDir = "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC"
@@ -294,6 +302,9 @@ function initEnvironment() {
     invokeBatchFile -batchFile "$($vcDir)\vcvarsall.bat"
     invokeBatchFile -batchFile "$($workDir)\bin\phpsdk_setvars.bat" `
             -argumentList $buildArch
+
+    Write-Host "Setting NO_INTERACTION for the test suite"
+    $env:NO_INTERACTION = 1
 }
 
 function getBuildTargetDir() {
@@ -356,6 +367,35 @@ function build() {
 
         Write-Host "Running nmake"
         & nmake
+    } finally {
+        Pop-Location
+    }
+}
+
+function test() {
+    Param(
+        [string] $buildTargetDir,
+        [string] $srcVersion
+    )
+
+    try {
+        Push-Location $buildTargetDir
+
+        # Run the tests directly rather than using the nmake test target, as the
+        # generated Makefile incorrectly attempts to run a partial build of PHP
+        # before the libraries have been bundled. This leads to errors like the
+        # following:
+        #
+        #     The program can't start because SSLEAY32.dll is missing from your
+        #     computer. Try reinstalling the program to fix this problem.
+
+        Write-Host "Running test suite"
+        $command = & nmake /NOLOGO /N test
+        $command = $command.Replace("`"Release\php.exe`"", "$(Get-Location)\Release\php-$($srcVersion)\php.exe")
+        $command = $command.Trim().Split(" ")
+        $commandArgs = $command[1..($command.Length-1)]
+
+        & $command[0] @commandArgs
     } finally {
         Pop-Location
     }
@@ -426,5 +466,10 @@ if ($actions.Contains("build")) {
 
 if ($actions.Contains("snapshot")) {
     snapshot -buildTargetDir $buildTargetDir
+    waitForInput
+}
+
+if ($actions.Contains("test")) {
+    test -buildTargetDir $buildTargetDir -srcVersion $srcVersion
     waitForInput
 }
