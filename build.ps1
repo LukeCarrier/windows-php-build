@@ -71,6 +71,7 @@ Param(
     [string] $srcUrl = "http://uk1.php.net/get/php-$($srcVersion).tar.bz2/from/this/mirror",
 
     [switch]   $fork,
+    [switch]   $debug,
     [string[]] $actions = @("cache", "clean", "prepare", "configure", "build", "snapshot"),
 
     [string] $7zip = "C:\Program Files\7-Zip\7z.exe",
@@ -81,6 +82,13 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $DebugPreference = "Continue"
 $VerbosePreference = "Continue"
+
+function waitForInput() {
+    if ($debug) {
+        Write-Host "Pausing; press any key to continue..."
+        $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") >$null
+    }
+}
 
 function cacheFile() {
     Param(
@@ -383,15 +391,18 @@ if ($actions.Contains("cache")) {
             -binUrl $binUrl -binVersion $binVersion -binMd5sum $binMd5sum `
             -sdkUrl $sdkUrl -sdkVersion $sdkVersion -sdkMd5sum $sdkMd5sum `
             -srcUrl $srcUrl -srcVersion $srcVersion -srcMd5sum $srcMd5sum
+    waitForInput
 }
 
 if ($actions.Contains("clean") -or !(Test-Path -Type Container -Path $workDir)) {
     initWorkDir -binFile $cache.BinFile -workDir $workDir
+    waitForInput
 }
 
 if ($actions.Contains("prepare")) {
     prepareEnvironment -workDir $workDir -vcVersion $vcVersion `
             -srcFile $cache.SrcFile -sdkFile $Cache.SdkFile
+    waitForInput
 }
 
 $buildTargetDir = getBuildTargetDir -workDir $workDir -vcVersion $vcVersion `
@@ -399,17 +410,21 @@ $buildTargetDir = getBuildTargetDir -workDir $workDir -vcVersion $vcVersion `
 $depsDir        = getDepsDir -workDir $workDir -vcVersion $vcVersion `
         -buildArch $buildArch
 initEnvironment -vcDir $vcDir
+waitForInput
 
 if ($actions.Contains("configure")) {
     configure -buildTargetDir $buildTargetDir -depsDir $depsDir `
             -configure $configure
+    waitForInput
 }
 
 if ($actions.Contains("build")) {
     build -buildTargetDir $buildTargetDir -vcVersion $vcVersion `
             -buildArch $buildArch -srcVersion $srcVersion
+    waitForInput
 }
 
 if ($actions.Contains("snapshot")) {
     snapshot -buildTargetDir $buildTargetDir
+    waitForInput
 }
