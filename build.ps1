@@ -95,6 +95,8 @@ function waitForInput() {
     if ($debug) {
         Write-Host "Pausing; press any key to continue..."
         $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") >$null
+
+        Clear-Host
     }
 }
 
