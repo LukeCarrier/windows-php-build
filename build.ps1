@@ -332,8 +332,9 @@ function getDepsDir() {
 
 function configure() {
     Param(
-        [string] $buildTargetDir,
-        [string] $depsDir
+        [string]   $buildTargetDir,
+        [string]   $depsDir,
+        [string[]] $configure
     )
 
     $configureFlags = $configure | Foreach-Object {
