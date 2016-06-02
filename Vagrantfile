@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "reload"
 
   config.vm.define "php56" do |php56|
-    php56.vm.hostname = "php56.local"
+    php56.vm.hostname = "php56"
 
     php56.vm.provision "dsc" do |dsc|
       dsc.module_path = ["modules"]
@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "php70" do |php70|
-    php70.vm.hostname = "php70.local"
+    php70.vm.hostname = "php70"
 
     php70.vm.provision "dsc" do |dsc|
       dsc.module_path = ["modules"]
