@@ -48,6 +48,10 @@ Param(
         #"--enable-zip",                       # Zip compression
         #"--enable-zlib",                      # Zlib compression
 
+        # Default features/extensions that break tests
+        "--enable-session",
+        "--with-pcre-jit",
+
         # Database extensions
         #"--with-pdo-sqlsrv",
         #"--with-sqlsrv",
