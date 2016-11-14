@@ -2,6 +2,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $VerbosePreference = "Continue"
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 Configuration Php70Build
 {
     Import-DscResource -ModuleName cChoco
