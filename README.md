@@ -4,7 +4,7 @@ Reliable, reproducible builds of PHP for Windows.
 
 * * *
 
-## Testing
+## Testing DSC
 
 For the time being, we're doing this manually via
 [Vagrant](https://www.vagrantup.com/).
@@ -22,4 +22,14 @@ $ vagrant rdp
 $ vagrant reload
 
 $ vagrant provision
+```
+
+## Performing builds
+
+```
+# For PHP 5.6
+> C:\vagrant\build70.ps1
+
+# For PHP 7.0
+> C:\vagrant\build70.ps1
 ```
