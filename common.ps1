@@ -210,6 +210,15 @@ function initEnvironment() {
         [string] $vcDir
     )
 
+    if (Test-Path Env:\PHP_WINDOWS_VC_DIR) {
+        if ($env:PHP_WINDOWS_VC_DIR -eq $vcDir) {
+            Write-Warning "Skipping environment initialisation; it's already happened"
+        } else {
+            throw "Cannot initialise environment for `"$($vcDir)`"; already done for `"$($env:PHP_WINDOWS_VC_DIR)`""
+        }
+    }
+    $env:PHP_WINDOWS_VC_DIR = $vcDir
+
     Write-Host "Configuring environment from $($vcDir)"
 
     invokeBatchFile -batchFile "$($vcDir)\vcvarsall.bat"
