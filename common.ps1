@@ -27,6 +27,10 @@ function cacheFile() {
     $attempt = 0
     while (!(Test-Path -Path $target -Type Leaf) `
             -or $md5sum -ne $desiredMd5sum) {
+        if ($attempt -gt 1) {
+            Write-Warning "MD5 checksum did not match expected $($desiredMd5sum)"
+        }
+
         $attempt++
         if ($attempt -gt $maxAttempts) {
             Write-Error "Failed after $($maxAttempts) attempts"
