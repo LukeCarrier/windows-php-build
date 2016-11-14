@@ -72,7 +72,6 @@ Param(
     [switch]   $fork,
     [switch]   $pause,
     [string[]] $actions = @(
-        "cache",
         "clean",
         "prepare",
         "configure",

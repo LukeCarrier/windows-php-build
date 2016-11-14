@@ -414,13 +414,11 @@ function Do-PhpBuild() {
     }
 
     makeDirs
-    if ($actions.Contains("cache")) {
-        $cache = downloadSources -cacheDir $cacheDir `
-                -binUrl $binUrl -binVersion $binVersion -binMd5sum $binMd5sum `
-                -sdkUrl $sdkUrl -sdkVersion $sdkVersion -sdkMd5sum $sdkMd5sum `
-                -srcUrl $srcUrl -srcVersion $srcVersion -srcMd5sum $srcMd5sum
-        waitForInput
-    }
+    $cache = downloadSources -cacheDir $cacheDir `
+            -binUrl $binUrl -binVersion $binVersion -binMd5sum $binMd5sum `
+            -sdkUrl $sdkUrl -sdkVersion $sdkVersion -sdkMd5sum $sdkMd5sum `
+            -srcUrl $srcUrl -srcVersion $srcVersion -srcMd5sum $srcMd5sum
+    waitForInput
 
     if ($actions.Contains("clean") -or !(Test-Path -Type Container -Path $workDir)) {
         initWorkDir -binFile $cache.BinFile -workDir $workDir
