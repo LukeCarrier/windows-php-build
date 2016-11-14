@@ -60,13 +60,14 @@ Param(
     [string] $sdkVersion = "5.6-$($vcVersion)-$($buildArch)",
     [string] $srcVersion = "5.6.21",
 
+    [string] $binUrl    = "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-$($binVersion).zip",
     [string] $binMd5sum = "C49E5782D6B1458A72525C87DE0D416A",
-    [string] $sdkMd5sum = "83E7772DA1B97BB28C0607DFD9B1E5A5",
-    [string] $srcMd5sum = "141464CE6B297AA2295B8416C6DBD5E5",
 
-    [string] $binUrl = "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-$($binVersion).zip",
-    [string] $sdkUrl = "http://windows.php.net/downloads/php-sdk/deps-$($sdkVersion).7z",
-    [string] $srcUrl = "http://uk1.php.net/get/php-$($srcVersion).tar.bz2/from/this/mirror",
+    [string] $sdkUrl    = "http://windows.php.net/downloads/php-sdk/deps-$($sdkVersion).7z",
+    [string] $sdkMd5sum = "83E7772DA1B97BB28C0607DFD9B1E5A5",
+
+    [string] $srcUrl    = "http://uk1.php.net/get/php-$($srcVersion).tar.bz2/from/this/mirror",
+    [string] $srcMd5sum = "141464CE6B297AA2295B8416C6DBD5E5",
 
     [switch]   $fork,
     [switch]   $pause,

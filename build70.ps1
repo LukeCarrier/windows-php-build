@@ -58,15 +58,16 @@ Param(
 
     [string] $binVersion = "20110915",
     [string] $sdkVersion = "7.0-$($vcVersion)-$($buildArch)",
-    [string] $srcVersion = "7.0.7",
+    [string] $srcVersion = "7.0.13",
 
+    [string] $binUrl    = "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-$($binVersion).zip",
     [string] $binMd5sum = "C49E5782D6B1458A72525C87DE0D416A",
-    [string] $sdkMd5sum = "F8208E1EF9A4DAA77F569EBE72F84672",
-    [string] $srcMd5sum = "CC231DE15146CA14A69610F695995AB8",
 
-    [string] $binUrl = "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-$($binVersion).zip",
-    [string] $sdkUrl = "http://windows.php.net/downloads/php-sdk/deps-$($sdkVersion).7z",
-    [string] $srcUrl = "http://uk1.php.net/get/php-$($srcVersion).tar.bz2/from/this/mirror",
+    [string] $sdkUrl    = "http://windows.php.net/downloads/php-sdk/deps-$($sdkVersion).7z",
+    [string] $sdkMd5sum = "98841D20C844265A3A0C14070FD38887",
+
+    [string] $srcUrl    = "http://uk1.php.net/get/php-$($srcVersion).tar.bz2/from/this/mirror",
+    [string] $srcMd5sum = "F62D1C9DDB3A791B7EAC423C7B2A769C",
 
     [switch]   $fork,
     [switch]   $pause,
