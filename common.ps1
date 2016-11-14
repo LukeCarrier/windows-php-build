@@ -404,8 +404,6 @@ function Do-PhpBuild() {
         [string] $vcDir
     )
 
-    Write-Host $x7zip
-
     if ($fork) {
         Write-Host "Spawning child process to host build"
         $PSBoundParameters.Remove("fork") >$null
