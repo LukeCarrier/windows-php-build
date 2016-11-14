@@ -396,9 +396,6 @@ function Do-PhpBuild() {
         [string[]] $actions,
 
         [Parameter(Mandatory=$true)]
-        [bool] $usePgo,
-
-        [Parameter(Mandatory=$true)]
         #[ValidateScript({Write-Host $_; Test-Path -Path $_ -Type Leaf})]
         [string] $x7zip,
 
@@ -446,39 +443,8 @@ function Do-PhpBuild() {
     waitForInput
 
     if ($actions.Contains("configure")) {
-        if ($usePgo) {
-            # Building with PGO (Profile-Guided Optimisation) requires multiple
-            # stages:
-            #
-            # 1) Running a build with PGI (Profile Guided Instrumentation) enabled,
-            #    building binaries capable of gener instrumentation data.
-            # 2) Generating the instrumentation data, in our case by running the PHP
-            #    test suite against the generated binaries.
-            # 3) Repeating the build utilising the instrumentation data for a final,
-            #    optimised build.
-
-            $pgiConfigure = $configure.Clone()
-            $pgiConfigure.Add("--enable-pgi")
-            $pgoConfigure = $configure.Clone()
-            $pgoConfigure.Add("--with-pgo")
-
-            Write-Host $pgiConfigure
-            Write-Host $pgoConfigure
-
-            configure -buildTargetDir $buildTargetDir -depsDir $depsDir `
-                    -configure $pgiConfigure
-            build -buildTargetDir $buildTargetDir -vcVersion $vcVersion `
-                    -buildArch $buildArch -srcVersion $srcVersion
-
-            snapshot -buildTargetDir $buildTargetDir
-            test -buildTargetDir $buildTargetDir -srcVersion $srcVersion
-
-            configure -buildTargetDir $buildTargetDir -depsDir $depsDir `
-                    -configure $pgoConfigure
-        } else {
-            configure -buildTargetDir $buildTargetDir -depsDir $depsDir `
-                    -configure $configure
-        }
+        configure -buildTargetDir $buildTargetDir -depsDir $depsDir `
+                -configure $configure
 
         waitForInput
     }

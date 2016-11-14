@@ -22,7 +22,6 @@ Param(
     [switch]   $fork,
     [switch]   $pause,
     [string[]] $actions,
-    [switch]   $usePgo,
 
     [string] $7zip,
     [string] $vcDir
@@ -53,6 +52,5 @@ Do-PhpBuild `
         -fork $fork `
         -pause $pause `
         -actions $actions `
-        -usePgo $usePgo `
         -7zip $7zip `
         -vcDir $vcDir

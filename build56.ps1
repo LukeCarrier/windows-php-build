@@ -80,7 +80,6 @@ Param(
         "test",
         "snapshot"
     ),
-    [switch]   $usePgo,
 
     [string] $x7zip = "C:\Program Files\7-Zip\7z.exe",
     [string] $vcDir = "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC"
@@ -111,6 +110,5 @@ Do-PhpBuild `
         -fork $fork `
         -pause $pause `
         -actions $actions `
-        -usePgo $usePgo `
         -x7zip $x7zip `
         -vcDir $vcDir
