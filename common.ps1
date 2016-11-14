@@ -303,14 +303,13 @@ function test() {
         #     The program can't start because SSLEAY32.dll is missing from your
         #     computer. Try reinstalling the program to fix this problem.
 
-        # TODO: fix quoting problem here with 7.x builds
         Write-Host "Running test suite"
         $command = & nmake /NOLOGO /N test
         $command = $command.Replace("`"Release\php.exe`"", "$(Get-Location)\Release\php-$($srcVersion)\php.exe")
         $command = $command.Trim().Split(" ")
         $commandArgs = $command[1..($command.Length-1)]
 
-        & $command[0] @commandArgs
+        & $command[0].Replace("`"", "") @commandArgs
     } finally {
         Pop-Location
     }
