@@ -77,8 +77,8 @@ Param(
         "prepare",
         "configure",
         "build",
-        "test",
-        "snapshot"
+        "snapshot",
+        "test"
     ),
 
     [string] $x7zip = "C:\Program Files\7-Zip\7z.exe",
