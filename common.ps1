@@ -214,6 +214,7 @@ function initEnvironment() {
     if (Test-Path Env:\PHP_WINDOWS_VC_DIR) {
         if (($env:PHP_WINDOWS_VC_DIR -eq $vcDir) -and ($env:PHP_WINDOWS_VC_ARCH -eq $buildArch)) {
             Write-Warning "Skipping environment initialisation; it's already happened"
+            return
         } else {
             throw "Cannot initialise environment for `"$($vcDir)`" ($($buildArch)); already done for `"$($env:PHP_WINDOWS_VC_DIR)`" ($($env:PHP_WINDOWS_VC_ARCH))"
         }
