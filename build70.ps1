@@ -11,50 +11,9 @@ Param(
         "--with-mp=auto",                     # Use multiple process, number determined by compiler
 
         # Really important options
-        "--enable-one-shot",                  # Optimise build for performance; requires clean
+        "--enable-snapshot-build",            # Optimise build for performance; requires clean
         "--enable-debug-pack",                # Generate external debugging symbols
         "--disable-zts",                      # Disable thread safety (it's experimental)
-        "--disable-all",                      # Disable all extensions by default
-
-        # Optional libraries
-        #"--with-xml",                         # Expat XML parser
-        #"--with-libxml",                      # XML parser
-
-        # SAPIs
-        "--enable-cli",                       # Command line (php.exe)
-        "--enable-cgi",                       # FastCGI (php-cgi.exe)
-
-        # Miscellaneous extensions
-        #"--enable-ctype",                     # Character type checking
-        #"--with-curl",                        # cURL HTTP client
-        #"--with-gd",                          # Graphics processing
-        #"--with-iconv",                       # Character set conversion
-        #"--enable-intl",                      # Internationalisation
-        #"--enable-json",                      # JSON encode/decode
-        #"--enable-mbstring",                  # Multibyte strings
-        #"--with-openssl",                     # OpenSSL PKI
-        #"--enable-pdo",                       # PHP Data Objects
-        #"--enable-soap",                      # SOAP client
-        #"--enable-tokenizer",                 # Tokenizer for PHP source
-
-        # XML extensions
-        #"--with-dom",                         # Document Object Model
-        #"--with-simplexml"                    # SimpleXML parser
-        #"--enable-xmlreader",                 # XMLReader
-        #"--with-xmlrpc",                      # XMLRPC-EPI support
-        #"--enable-xmlwriter",                 # XMLWriter
-
-        # Compression
-        #"--enable-zip",                       # Zip compression
-        #"--enable-zlib",                      # Zlib compression
-
-        # Default features/extensions that break tests
-        "--enable-session",
-        "--with-pcre-jit",
-
-        # Database extensions
-        #"--with-pdo-sqlsrv",
-        #"--with-sqlsrv",
 
         # An empty one for those pesky commas
         ""
