@@ -37,6 +37,7 @@ Param(
     [string[]] $actions = @(
         "clean",
         "prepare",
+        "prepare-extensions",
         "configure",
         "build",
         "snapshot",

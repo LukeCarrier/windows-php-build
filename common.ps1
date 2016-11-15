@@ -1,3 +1,5 @@
+$global:PHP_WINDOWS_EXT_DIRS = @()
+
 function waitForInput() {
     if ($pause) {
         Write-Host "Pausing; press any key to continue..."
@@ -261,7 +263,7 @@ function configure() {
         [string[]] $configure
     )
 
-    $configureFlags = $configure | Foreach-Object {
+    $configureFlags = $configure | ForEach-Object {
         $_.Replace("{deps}", $depsDir)
     }
     Write-Debug "Final configure command is $([System.String]::Join(" ", $configureFlags))"
@@ -277,6 +279,34 @@ function configure() {
     } finally {
         Pop-Location
     }
+}
+
+function addExtension() {
+    Param(
+        [string[]] $srcDir
+    )
+
+    $global:PHP_WINDOWS_EXT_DIRS += $srcDir
+}
+
+function installExtensions() {
+    Param(
+        [string] $buildTargetDir
+    )
+
+    Write-Debug "Installing $($global:PHP_WINDOWS_EXT_DIRS.Count) extensions into build directory"
+    $global:PHP_WINDOWS_EXT_DIRS | ForEach-Object {
+        $extName = (Get-Item $_).BaseName
+        $extTargetDir = Join-Path (Join-Path $buildTargetDir "ext") $extName
+        Write-Debug "Installing extension $($extName) to $($extTargetDir)"
+
+        if (Test-Path $extTargetDir) {
+            Write-Warning "Removing existing extension directory $($extTargetDir)"
+            Remove-Item -Force -Recurse $extTargetDir
+        }
+        Copy-Item -Recurse $_ $extTargetDir
+    }
+
 }
 
 function build() {
@@ -433,6 +463,11 @@ function Do-PhpBuild() {
             -srcUrl $srcUrl -srcVersion $srcVersion -srcMd5sum $srcMd5sum
     waitForInput
 
+    $buildTargetDir = getBuildTargetDir -workDir $workDir -vcVersion $vcVersion `
+            -buildArch $buildArch -srcVersion $srcVersion
+    $depsDir        = getDepsDir -workDir $workDir -vcVersion $vcVersion `
+            -buildArch $buildArch
+
     if ($actions.Contains("clean") -or !(Test-Path -Type Container -Path $workDir)) {
         initWorkDir -binFile $cache.BinFile -workDir $workDir
         waitForInput
@@ -444,10 +479,10 @@ function Do-PhpBuild() {
         waitForInput
     }
 
-    $buildTargetDir = getBuildTargetDir -workDir $workDir -vcVersion $vcVersion `
-            -buildArch $buildArch -srcVersion $srcVersion
-    $depsDir        = getDepsDir -workDir $workDir -vcVersion $vcVersion `
-            -buildArch $buildArch
+    if ($actions.Contains("prepare-extensions")) {
+        installExtensions -buildTargetDir $buildTargetDir
+    }
+
     initEnvironment -buildArch $buildArch -vcDir $vcDir
     waitForInput
 
