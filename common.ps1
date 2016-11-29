@@ -493,10 +493,30 @@ function Do-PhpBuild() {
         waitForInput
     }
 
+    if ($actions.Contains("configure-pgi")) {
+
+    }
+
     if ($actions.Contains("build")) {
         build -buildTargetDir $buildTargetDir -vcVersion $vcVersion `
                 -buildArch $buildArch -srcVersion $srcVersion
         waitForInput
+    }
+
+    if ($actions.Contains("remove-pgc")) {
+
+    }
+
+    if ($actions.Contains("-- TODO --")) {
+
+    }
+
+    if ($actions.Contains("clean-pgo")) {
+
+    }
+
+    if ($actions.Contains("configure-pgo")) {
+
     }
 
     if ($actions.Contains("snapshot")) {
