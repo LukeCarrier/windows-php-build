@@ -4,6 +4,11 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "bootstrap.ps1"
   config.vm.provision "reload"
 
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 4096
+    v.cpus = 4
+  end
+
   config.vm.define "php56" do |php56|
     php56.vm.hostname = "php56"
 
