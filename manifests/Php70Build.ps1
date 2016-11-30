@@ -2,8 +2,6 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $VerbosePreference = "Continue"
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 Configuration Php70Build
 {
     Import-DscResource -ModuleName cChoco
@@ -18,6 +16,12 @@ Configuration Php70Build
         cChocoInstaller installChoco
         {
             InstallDir = "C:\ProgramData\choco"
+        }
+
+        cChocoPackageInstaller installGit
+        {
+            Name = "git"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
 
         cChocoPackageInstaller installVs2015

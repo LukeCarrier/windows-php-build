@@ -2,8 +2,6 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $VerbosePreference = "Continue"
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 Configuration Php56Build
 {
     Import-DscResource -ModuleName cChoco
@@ -20,9 +18,9 @@ Configuration Php56Build
             InstallDir = "C:\ProgramData\choco"
         }
 
-        cChocoPackageInstaller installWmf5
+        cChocoPackageInstaller installGit
         {
-            Name = "powershell"
+            Name = "git"
             DependsOn = "[cChocoInstaller]installChoco"
         }
 

@@ -63,14 +63,13 @@ $ErrorActionPreference = "Stop"
 $DebugPreference = "Continue"
 $VerbosePreference = "Continue"
 
-. (Join-Path (Split-Path -Parent $PSScriptRoot) "common.ps1")
+. (Join-Path $PSScriptRoot "common.ps1")
 
 function fetchSqlsrvExtension() {
     Param(
         [string]   $repo,
         [string]   $ref,
-        [string]   $dir,
-        [string[]] $extDirs
+        [string]   $dir
     )
 
     if (!(Test-Path $dir)) {
@@ -91,18 +90,20 @@ if ($actions.Contains("prepare-extensions")) {
     # Otherwise we errors to the effect of:
     # fatal: Invalid symlink 'C:/vagrant': Function not implemented
     Push-Location "$($env:HOMEDRIVE)\"
-    $extSrcDirs = @()
+    try {
+        $extSrcDirs = @()
 
-    #fetchSqlsrvExtension -repo $sqlsrvRepo -ref $sqlsrvRef -dir $sqlsrvDir
-    $extSrcDirs += Join-Path $sqlsrvDir "sqlsrv"
-    $extSrcDirs += Join-Path $sqlsrvDir "pdo_sqlsrv"
+        fetchSqlsrvExtension -repo $sqlsrvRepo -ref $sqlsrvRef -dir $sqlsrvDir
+        $extSrcDirs += Join-Path $sqlsrvDir "sqlsrv"
+        $extSrcDirs += Join-Path $sqlsrvDir "pdo_sqlsrv"
 
-    $extSrcDirs | ForEach-Object {
-        Write-Host "Queueing extension $($_)"
-        addExtension -srcDir $_
+        $extSrcDirs | ForEach-Object {
+            Write-Host "Queueing extension $($_)"
+            addExtension -srcDir $_
+        }
+    } finally {
+        Pop-Location
     }
-
-    Pop-Location
 }
 
 Do-PhpBuild `
