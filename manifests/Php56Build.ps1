@@ -29,16 +29,19 @@ Configuration Php56Build
         cChocoPackageInstaller installVs2012
         {
             Name = "visualstudio2012wdx"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
 
         cChocoPackageInstaller installVcRedist2012
         {
             Name = "vcredist2012"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
 
         cChocoPackageInstaller install7zip
         {
             Name = "7zip"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
     }
 }

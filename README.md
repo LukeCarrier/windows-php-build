@@ -11,7 +11,6 @@ For the time being, we're doing this manually via
 
 ```
 $ vagrant plugin install vagrant-dsc
-$ vagrant plugin install vagrant-reload
 
 $ vagrant up --no-provision
 # Configure region and language options, allow machine to reboot

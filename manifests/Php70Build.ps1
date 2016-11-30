@@ -20,25 +20,22 @@ Configuration Php70Build
             InstallDir = "C:\ProgramData\choco"
         }
 
-        cChocoPackageInstaller installWmf5
-        {
-            Name = "powershell"
-            DependsOn = "[cChocoInstaller]installChoco"
-        }
-
         cChocoPackageInstaller installVs2015
         {
             Name = "visualstudio2015community"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
 
         cChocoPackageInstaller installVcRedist2015
         {
             Name = "vcredist2015"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
 
         cChocoPackageInstaller install7zip
         {
             Name = "7zip"
+            DependsOn = "[cChocoInstaller]installChoco"
         }
     }
 }
