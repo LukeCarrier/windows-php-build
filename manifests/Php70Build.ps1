@@ -27,6 +27,7 @@ Configuration Php70Build
         cChocoPackageInstaller installVs2015
         {
             Name = "visualstudio2015community"
+            Params = "--AdminFile C:\vagrant\VS2015.AdminDeployment.xml"
             DependsOn = "[cChocoInstaller]installChoco"
         }
 
