@@ -10,6 +10,8 @@ Vagrant.configure(2) do |config|
     php56.vm.hostname = "php56"
 
     php56.vm.provision "dsc" do |dsc|
+      dsc.module_install = ["cChoco"]
+
       dsc.module_path = ["modules"]
       dsc.manifests_path = "manifests"
 
@@ -22,6 +24,8 @@ Vagrant.configure(2) do |config|
     php70.vm.hostname = "php70"
 
     php70.vm.provision "dsc" do |dsc|
+      dsc.module_install = ["cChoco"]
+
       dsc.module_path = ["modules"]
       dsc.manifests_path = "manifests"
 
