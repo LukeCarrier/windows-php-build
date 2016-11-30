@@ -1,5 +1,8 @@
 # Additional extensions
 /extensions/
 
+# DSC modules
+/modules/
+
 # Vagrant
 /.vagrant/
