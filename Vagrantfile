@@ -1,5 +1,5 @@
 Vagrant.configure(2) do |config|
-  config.vm.box = "LukeCarrier/windows_2016_x64_standard-core"
+  config.vm.box = "LukeCarrier/windows_2016_x64_standard"
 
   config.vm.provision "shell", path: "bootstrap.ps1"
   config.vm.provision "reload"
