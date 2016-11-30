@@ -10,7 +10,7 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = false
 
-[*.{ps1,psd1}]
+[*.{ps1,psd1,xml}]
 indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
