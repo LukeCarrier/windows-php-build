@@ -29,6 +29,12 @@ Param(
         ""
     ),
 
+    [string[]] $testExtensionBlacklist = @(
+        "interbase",
+        "pdo_firebird",
+        "snmp"
+    ),
+
     [string] $binVersion = "20110915",
     [string] $sdkVersion = "7.0-$($vcVersion)-$($buildArch)",
     [string] $srcVersion = "7.0.14",
@@ -51,6 +57,7 @@ Param(
         "configure",
         "build",
         "snapshot",
+        "test-blacklist",
         "test"
     ),
 
@@ -112,6 +119,7 @@ Do-PhpBuild `
         -buildArch $buildArch `
         -vcVersion $vcVersion `
         -configure $configure `
+        -testExtensionBlacklist $testExtensionBlacklist `
         -binVersion $binVersion `
         -sdkVersion $sdkVersion `
         -srcVersion $srcVersion `

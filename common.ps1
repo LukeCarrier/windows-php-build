@@ -329,6 +329,29 @@ function build() {
     }
 }
 
+function blacklistExtensionsInTest() {
+    Param(
+        [string] $buildTargetDir,
+        [string] $srcVersion,
+        [string[]] $buildArch,
+        [string[]] $testExtensionBlacklist
+    )
+
+    $tmpIni = $buildTargetDir
+    if ($buildArch -ne "x86") {
+        $tmpIni += "\$($buildArch)"
+    }
+    $tmpIni += "\Release\tmp-php.ini"
+    Write-Host "Blacklisting $($testExtensionBlacklist -join ", ") extensions in $($tmpIni)"
+
+    $tmpIniContents = Get-Content -Raw -Path $tmpIni
+    foreach ($extension in $testExtensionBlacklist) {
+        $tmpIniContents = $tmpIniContents -replace "((?!;)(zend_)?extension=php_$($extension)\.dll)", ";`$1"
+    }
+
+    Set-Content -Value $tmpIniContents -Path $tmpIni
+}
+
 function test() {
     Param(
         [string] $buildTargetDir,
@@ -356,9 +379,10 @@ function test() {
                 # Correct the path to the PHP binary to be tested to work around
                 # the following style of failure:
                 #
-                #     The program can't start because SSLEAY32.dll is missing from your
-                #     computer. Try reinstalling the program to fix this problem.
-                "& " + $_.Trim().Replace("`"Release\php.exe`"", "$(Get-Location)\Release\php-$($srcVersion)\php.exe")
+                #     The program can't start because SSLEAY32.dll is missing
+                #     from your computer. Try reinstalling the program to fix
+                #     this problem.
+                "& " + $_.Trim().Replace("`"Release\php.exe`"", "$($buildTargetDir)\Release\php-$($srcVersion)\php.exe")
             } else {
                 "& " + $_.Trim()
             }
@@ -422,6 +446,9 @@ function Do-PhpBuild() {
         [Parameter(Mandatory=$true)]
         [ValidateNotNull()]
         [System.Collections.ArrayList] $configure,
+
+        [Parameter(Mandatory=$false)]
+        $testExtensionBlacklist = @(),
 
         [Parameter(Mandatory=$true)]
         [string] $binVersion,
@@ -528,6 +555,13 @@ function Do-PhpBuild() {
 
     if ($actions.Contains("snapshot")) {
         snapshot -buildTargetDir $buildTargetDir
+        waitForInput
+    }
+
+    if ($actions.Contains("test-blacklist")) {
+        blacklistExtensionsInTest -buildTargetDir $buildTargetDir `
+                -srcVersion $srcVersion -buildArch $buildArch `
+                -testExtensionBlacklist $testExtensionBlacklist
         waitForInput
     }
 
