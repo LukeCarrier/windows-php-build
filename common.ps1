@@ -336,23 +336,50 @@ function test() {
     )
 
     try {
+        Write-Host "Running test suite"
         Push-Location $buildTargetDir
 
-        # Run the tests directly rather than using the nmake test target, as the
-        # generated Makefile incorrectly attempts to run a partial build of PHP
-        # before the libraries have been bundled. This leads to errors like the
-        # following:
-        #
-        #     The program can't start because SSLEAY32.dll is missing from your
-        #     computer. Try reinstalling the program to fix this problem.
-
-        Write-Host "Running test suite"
+        # Get the command to run the tests from nmake rather than than Invoking
+        # the nmake test target, as the generated Makefile is broken.
         $command = & nmake /NOLOGO /N test
-        $command = $command.Replace("`"Release\php.exe`"", "$(Get-Location)\Release\php-$($srcVersion)\php.exe")
-        $command = $command.Trim().Split(" ")
-        $commandArgs = $command[1..($command.Length-1)]
 
-        & $command[0].Replace("`"", "") @commandArgs
+        $command = ($command.Split([Environment]::NewLine.ToCharArray()) | ForEach-Object {
+            if ($_ -like "*set PATH=*") {
+                # PHP >= 7.0.14 execute a set-tmp-env target here which attempts
+                # to run SET PATH=xxx. This doesn't work in PowerShell, so we
+                # have to fix up the command first. We'll run the tests in a
+                # subprocess to avoid polluting the build environment.
+                $_.Trim().Replace("set PATH=", "`$env:PATH = `"") + "`""
+            } elseif ($_ -like "*php.exe*") {
+                # Older versions of PHP incorrectly attempt to test an orphaned
+                # release binary without bundled libraries and extensions.
+                # Correct the path to the PHP binary to be tested to work around
+                # the following style of failure:
+                #
+                #     The program can't start because SSLEAY32.dll is missing from your
+                #     computer. Try reinstalling the program to fix this problem.
+                "& " + $_.Trim().Replace("`"Release\php.exe`"", "$(Get-Location)\Release\php-$($srcVersion)\php.exe")
+            } else {
+                "& " + $_.Trim()
+            }
+        }) -join ";`n"
+
+        Write-Debug "Patched > $($command)"
+        $block = [ScriptBlock]::Create("Set-Location $(Get-Location)`n" + $command)
+        $completeStates = @("Completed", "Failed")
+        try {
+            $job = Start-Job -ScriptBlock $block
+            while ($job.HasMoreData -or !($completeStates.Contains($job.State))) {
+                try {
+                    Receive-Job -Job $job
+                } catch {
+                    # Raised to indicate stderr output or failure? Either way,
+                    # not an issue for us.
+                }
+            }
+        } finally {
+            Remove-Job -Force -Job $job
+        }
     } finally {
         Pop-Location
     }
