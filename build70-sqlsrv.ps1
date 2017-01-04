@@ -31,7 +31,7 @@ Param(
 
     [string] $binVersion = "20110915",
     [string] $sdkVersion = "7.0-$($vcVersion)-$($buildArch)",
-    [string] $srcVersion = "7.0.13",
+    [string] $srcVersion = "7.0.14",
 
     [string] $binUrl    = "http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-$($binVersion).zip",
     [string] $binMd5sum = "C49E5782D6B1458A72525C87DE0D416A",
@@ -40,7 +40,7 @@ Param(
     [string] $sdkMd5sum = "98841D20C844265A3A0C14070FD38887",
 
     [string] $srcUrl    = "http://uk1.php.net/get/php-$($srcVersion).tar.bz2/from/this/mirror",
-    [string] $srcMd5sum = "F62D1C9DDB3A791B7EAC423C7B2A769C",
+    [string] $srcMd5sum = "903FF1FD199201D7E69DC0963797072B",
 
     [switch]   $fork,
     [switch]   $pause,
